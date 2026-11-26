@@ -4,63 +4,94 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#edf1e8">
-<title>桌面小部件 · 样式对照</title>
+<title>桌面小部件 · 手机预览</title>
 <style>
 :root{font:16px/1.45 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:#284237;background:#edf1e8;--green:#306747;--soft:#526b60;--line:#dce7db;--mint:#d9eee0}
-*{box-sizing:border-box}body{margin:0}.wrap{max-width:460px;margin:auto;padding:20px 15px 28px}h1,h2,h3,p{margin:0}h1{font-size:25px;margin-top:10px}p{font-size:13px;color:var(--soft)}a{color:var(--green)}article{margin-top:22px}.option{display:flex;align-items:baseline;gap:9px;margin-bottom:8px}.option h2{font-size:17px}.size{margin-left:auto;color:var(--soft);font-size:12px;white-space:nowrap}.sample{background:#fffdf7;border-radius:22px;padding:13px 12px;box-shadow:0 7px 20px #2946341a;border:1px solid #f1f4eb}.caption{margin:7px 3px 0}
-.bar{display:flex;align-items:center;gap:6px;justify-content:space-between;margin-bottom:10px}.bar strong{font-size:16px}.bar small{color:var(--soft);font-size:11px}.today{border-radius:99px;padding:4px 8px;background:var(--mint);font-size:11px;color:var(--green);white-space:nowrap}.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.tile{background:#f1f5ec;border-radius:11px;padding:6px 1px;text-align:center;font-size:11px;position:relative}.tile b{display:block;font-weight:normal;font-size:22px;margin:0 auto 1px}.tile em{color:var(--green);font-style:normal;font-size:11px;position:absolute;right:4px;top:3px}.tile.done{background:#deeee2;color:#4c6657}.meter{height:4px;margin:10px 2px 2px;background:#e9eee5;border-radius:4px;overflow:hidden}.meter i{display:block;width:50%;height:100%;background:#76a386}
-.week{display:grid;grid-template-columns:minmax(66px,1fr) repeat(7,minmax(0,24px));gap:4px;align-items:center}.week span{text-align:center;font-size:11px;height:22px;color:var(--soft)}.week .left{text-align:left;color:#354e41;white-space:nowrap}.week .yes,.week .due,.week .skip,.week .next{display:grid;place-items:center;border-radius:5px;font-size:10px}.yes{background:#d9eee0;color:#285d40!important}.due{background:#fff0d9;color:#844d26!important}.skip{background:#eef0e9}.next{background:#f4f5ee;color:#718479!important}
-.agenda{display:grid;grid-template-columns:minmax(120px,46%) 1fr;gap:9px}.monthhead{font-size:12px;color:#425f51;margin-bottom:4px}.month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px}.month span{height:16px;font-size:9px;display:grid;place-items:center;border-radius:4px}.month .has{background:#e7f0e5}.month .selected{background:var(--green);color:white;font-weight:700}.list{padding-left:9px;border-left:1px solid var(--line)}.list h3{font-size:12px;margin:0 0 4px}.list div{display:flex;align-items:center;gap:5px;font-size:11px;border-bottom:1px solid #ecf0e9;padding:5px 0}.list div:last-child{border-bottom:0}.list .marker{color:#346750;font-size:14px;line-height:1}.list .event{background:#e4edf4;border-radius:4px;padding:0 3px;color:#284a5d;white-space:nowrap}
+*{box-sizing:border-box}body{margin:0}.wrap{max-width:460px;margin:auto;padding:20px 15px 28px}h1,h2,p{margin:0}h1{font-size:25px;margin-top:10px}p{font-size:13px;color:var(--soft)}a{color:var(--green)}article{margin-top:21px}.option{display:flex;align-items:baseline;gap:9px;margin-bottom:7px}.option h2{font-size:17px}.size{margin-left:auto;color:var(--soft);font-size:12px;white-space:nowrap}.sample{background:#fffdf7;border-radius:20px;padding:11px;box-shadow:0 7px 16px #29463417;border:1px solid #f1f4eb}.caption{margin:7px 3px 0}button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}button:focus-visible{outline:2px solid var(--green)}[hidden]{display:none!important}
+.bar{display:flex;align-items:center;gap:6px;justify-content:space-between;margin-bottom:8px}.bar strong{font-size:15px}.bar small{color:var(--soft);font-size:11px}.pill{border-radius:99px;padding:4px 8px;background:var(--mint);font-size:11px;color:var(--green);white-space:nowrap}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.tile{background:#f1f5ec;border-radius:10px;padding:4px 1px;text-align:center;font-size:11px;overflow:hidden}.tile>*{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tile .icon{font-size:18px}.tile small{font-size:10px;color:var(--soft)}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}.week button{min-width:0;border-radius:7px;background:#edf2f6;padding:3px 2px;font-size:11px;text-align:center}.week button[aria-pressed=true]{background:var(--mint);color:var(--green)}.week button span{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.week button span+span{font-size:9px;margin-top:3px}
+.rows{display:grid;gap:4px}.row{display:flex;align-items:center;gap:7px;padding:3px 6px;border-radius:7px;background:#f1f5ec;min-height:33px;font-size:12px}.row strong{flex:1;font-weight:600}.row input{accent-color:var(--green);height:15px;width:15px}.row small{color:var(--soft)}.row.wide{justify-content:space-between}.summary{padding:6px 4px 0;color:var(--soft);font-size:11px}
+.buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.random{border-radius:14px;background:var(--mint);padding:10px 6px;font-size:13px;font-weight:650}.random-result{margin-top:8px;min-height:20px}.line{margin-top:7px}
 </style>
 </head>
 <body>
 <main class="wrap">
 <a href="mobile-calendar-draft.html">‹ 手机预览</a>
-<h1>桌面小部件样式</h1>
-<p>样式供选择，下面用示例内容演示。</p>
-<article aria-label="A 今日家务">
- <div class="option"><h2>A · 今日家务</h2><span class="size">约 4×2 格</span></div>
- <section class="sample">
-  <div class="bar"><strong>今日家务</strong><span class="today">已完成 2/4</span></div>
-  <div class="tiles"><div class="tile done"><em>✓</em><b>🧹</b>扫地</div><div class="tile done"><em>✓</em><b>🐾</b>铲猫砂</div><div class="tile"><b>🧺</b>换床单</div><div class="tile"><b>🗑️</b>倒垃圾</div></div>
-  <div class="meter"><i></i></div>
- </section>
- <p class="caption">常做家务一眼能找到，点图标直接完成。</p>
+<h1>桌面小部件</h1>
+<p>点按示例卡片，体验完成、选日期和随机挑选。</p>
+<article aria-label="家务小部件">
+ <div class="option"><h2>家务</h2><span class="size">4×3</span></div>
+ <section class="sample"><div class="bar"><strong>家务</strong><span class="pill" id="choreCount"></span></div><div class="tiles" id="chores"></div></section>
+ <p class="caption">点图标完成，名称底下显示本月实际完成次数。</p>
 </article>
-<article aria-label="B 家务一周">
- <div class="option"><h2>B · 家务一周</h2><span class="size">约 4×3 格</span></div>
- <section class="sample">
-  <div class="bar"><strong>家务一周</strong><small>11 月 23–29 日</small></div>
-  <div class="week">
-   <span></span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
-   <span class="left">🐾 铲猫砂</span><span class="yes">✓</span><span class="yes">✓</span><span class="yes">✓</span><span class="due">○</span><span class="next">·</span><span class="next">·</span><span class="next">·</span>
-   <span class="left">🧹 扫地</span><span class="yes">✓</span><span class="skip">—</span><span class="skip">—</span><span class="due">○</span><span class="skip">—</span><span class="next">·</span><span class="skip">—</span>
-   <span class="left">🧺 换床单</span><span class="skip">—</span><span class="skip">—</span><span class="yes">✓</span><span class="skip">—</span><span class="skip">—</span><span class="skip">—</span><span class="next">·</span>
-  </div>
- </section>
- <p class="caption">看重复家务哪天做了、哪天该做；横杠表示当天没安排。</p>
+<article aria-label="任务周视图">
+ <div class="option"><h2>任务周视图</h2><span class="size">约 4×3 格</span></div>
+ <section class="sample"><div class="bar"><strong>本周</strong><small>11 月 23–29 日</small></div><div class="week" id="week"></div><p class="summary" id="weekSummary"></p></section>
 </article>
-<article aria-label="C 月历加当天事项">
- <div class="option"><h2>C · 月历＋当天事项</h2><span class="size">约 4×3 或 4×4 格</span></div>
- <section class="sample agenda">
-  <div><div class="monthhead">11 月 2026</div><div class="month" id="month"></div></div>
-  <div class="list"><h3>11 月 26 日 · 周四</h3>
-   <div><span class="marker">□</span> 交材料</div>
-   <div><span class="marker">□</span> 准备读书会</div>
-   <div><span class="event">16:30</span> 牙科复诊</div>
-  </div>
- </section>
- <p class="caption">选日期看当天待办和手机日程，延续日历里隐藏家务的规则。</p>
+<article aria-label="任务列表">
+ <div class="option"><h2>任务列表</h2><span class="size">不含家务</span></div>
+ <section class="sample"><div class="rows" id="tasks"></div></section>
+ <p class="caption">显示有日期和无日期的待办，点圆框完成。</p>
+</article>
+<article aria-label="随机按钮">
+ <div class="option"><h2>两个随机按钮</h2><span class="size">各约 2×1 格</span></div>
+ <section class="sample"><div class="buttons"><button class="random" id="houseworkPick">🎲 随机家务</button><button class="random" id="taskPick">🎲 随机任务</button></div><p class="random-result" id="result" aria-live="polite">点按钮挑一件未完成的事项。</p></section>
+ <p class="caption">点按只挑选待办，是否完成由你勾选。</p>
 </article>
 </main>
 <script>
-const month=document.getElementById('month');
-for(const value of [...'一二三四五六日',...Array(6).fill(''),...Array.from({length:30},(_,i)=>i+1)]){
- const cell=document.createElement('span');cell.textContent=value;
- if(value===26)cell.className='selected';
- else if([6,11,17,21,27,28].includes(value))cell.className='has';
- month.append(cell);
+const $=id=>document.getElementById(id);
+const chores=[
+ ['🧹','扫地',7],['🐾','铲猫砂',18],['🧺','换床单',2],['🗑️','倒垃圾',9],
+ ['🍽️','洗碗',12],['🧽','擦台面',3],['🧺','收衣服',4],['🧽','洗手池',1],
+ ['💧','给花浇水',2],['🧹','整理玄关',3],['🧽','擦餐桌',6],['🧹','清理书桌',1]
+].map(([icon,title,count])=>({icon,title,count,done:false}));
+const tasks=[
+ {title:'交材料',date:26},{title:'准备读书会',date:26},{title:'领取快递',date:27},{title:'整理照片',date:null}
+];
+let selectedDay=26;
+function text(tag,value){const e=document.createElement(tag);e.textContent=value;return e}
+function renderChores(){
+ const pending=chores.filter(t=>!t.done);
+ $('choreCount').textContent=pending.length+' 件待做';
+ $('chores').replaceChildren(...pending.map(t=>{
+  const card=text('button','');card.className='tile';card.setAttribute('aria-label','完成 '+t.title);
+  const icon=text('span',t.icon);icon.className='icon';
+  card.append(icon,text('span',t.title),text('small','本月已做 '+t.count+' 次'));
+  card.onclick=()=>{t.done=true;t.count++;$('result').textContent='已完成 '+t.title+' · 本月已做 '+t.count+' 次';renderChores()};
+  return card;
+ }));
 }
+function renderWeek(){
+ const days=['一','二','三','四','五','六','日'];
+ $('week').replaceChildren(...days.map((label,i)=>{
+  const day=i+23, group=tasks.filter(t=>!t.done&&t.date===day), btn=text('button','');
+  btn.setAttribute('aria-pressed',day===selectedDay);
+  btn.append(text('span',label+' '+day),text('span',group[0]?.title||'—'));
+  btn.onclick=()=>{selectedDay=day;renderWeek()};
+  return btn;
+ }));
+ const titles=tasks.filter(t=>!t.done&&t.date===selectedDay).map(t=>t.title);
+ $('weekSummary').textContent='11 月 '+selectedDay+' 日 · '+(titles.join('、')||'没有待办');
+}
+function renderTasks(){
+ const pending=tasks.filter(t=>!t.done);
+ $('tasks').replaceChildren(...pending.map(t=>{
+  const row=text('label','');row.className='row';
+  const input=document.createElement('input');input.type='checkbox';input.setAttribute('aria-label','完成 '+t.title);
+  input.onchange=()=>{t.done=true;renderTasks();renderWeek()};
+  row.append(input,text('strong',t.title),text('small',t.date?'11/'+t.date:'无日期'));return row;
+ }));
+ if(!pending.length)$('tasks').append(text('p','暂时没有待办'));
+}
+function pick(entries,empty){
+ const pending=entries.filter(t=>!t.done), choice=pending[Math.floor(Math.random()*pending.length)];
+ $('result').textContent=choice?'抽到：'+choice.title:empty;
+}
+$('houseworkPick').onclick=()=>pick(chores,'没有待做家务');
+$('taskPick').onclick=()=>pick(tasks,'没有待办任务');
+renderChores();renderWeek();renderTasks();
 </script>
 </body>
 </html>

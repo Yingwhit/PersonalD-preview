@@ -10,7 +10,7 @@
 当前手机草稿和样式图可独立打开：
 
 - [手机版交互预览](mobile-calendar-draft.html)
-- [桌面小部件样式对照](widget-styles-draft.html) · [整张效果图](widget-styles-draft.png)
+- [桌面小部件交互预览](widget-styles-draft.html) · [效果图](widget-styles-draft.png)
 
 ## GitHub Pages
 

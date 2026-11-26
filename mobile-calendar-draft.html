@@ -31,6 +31,9 @@ textarea,select{background:#fffdf9;border:1px solid #bdcabb;border-radius:12px;p
 .datehead{position:relative;height:25px}.datehead .shift-label{position:absolute;right:1px;top:6px;font-size:9px;line-height:12px;color:#526f86}.holiday .datehead .shift-label{color:#92593e}.dayhint{height:12px;color:var(--soft);line-height:12px;font-size:9px}
 .setting-line{display:flex;align-items:center;justify-content:space-between;gap:8px}.setting-line input{width:38px;height:20px;accent-color:var(--green)}a.gallery{display:block;text-decoration:none;text-align:center}
 .ball-demo{position:absolute;z-index:4;right:6px;top:50%;display:grid;gap:7px;justify-items:end}.ball-demo .ball-toggle{width:45px;height:45px;border-radius:50%;background:var(--green);color:#fff;box-shadow:0 5px 14px #244a3444;font-size:25px;touch-action:none}.ball-panel{position:absolute;bottom:51px;right:0;min-width:126px;display:grid;padding:5px;border-radius:13px;background:#fffcf1;box-shadow:0 4px 20px #2842332b}.ball-panel button{min-height:36px;white-space:nowrap}.desc-actions{display:flex;align-items:center;justify-content:space-between;gap:8px}.desc-actions button{color:var(--green);min-height:33px;font-size:12px}
+
+.taskpage .tiles{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.taskpage .tile{min-height:81px}.taskpage .tile strong,.taskpage .tile small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+dialog.large-wish textarea{height:min(64dvh,calc(100dvh - 186px));min-height:140px}
 </style>
 </head>
 <body>
@@ -104,8 +107,11 @@ const importedEvents = {
 };
 const chores=[
  ['🧹','扫地','今天'],['🐾','铲猫砂','今天'],['🧺','换床单','本周'],
- ['🍽️','洗碗','今天'],['🧽','擦厨房台面','今天'],['🗑️','倒垃圾','今天']
+ ['🍽️','洗碗','今天'],['🧽','擦厨房台面','今天'],['🗑️','倒垃圾','今天'],
+ ['🧺','收衣服','本周'],['🧽','擦洗手池','本周'],['💧','给花浇水','本周'],
+ ['🧹','整理玄关','本周'],['🧽','擦餐桌','今天'],['🧹','清理书桌','本周']
 ];
+const monthChoreCounts=[7,18,2,12,3,9,4,1,2,3,6,1];
 let selection=sampleToday, page=new Date(2026,10,1), zoom=1, imported=false, selectedKinds=new Set(), completed=new Set(), notes=[];
 let view='tasks', taskKind='all', dateScope='all', search='', nextTaskId=1, minFilter=0, energyLimit=2;
 const localTasks=[
@@ -153,7 +159,7 @@ function eventsFor(day){
    imported&&!selectedKinds.size ? importedEvents[dateKey(day)]||[] : []);
 }
 function openSheet(title){
- $('sheetTitle').textContent=title;$('sheetBody').replaceChildren();
+ $('sheet').classList.remove('large-wish');$('sheetTitle').textContent=title;$('sheetBody').replaceChildren();
  if(!$('sheet').open)$('sheet').showModal();return $('sheetBody');
 }
 function toast(message){$('toast').textContent=message;$('toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').hidden=true,2300)}
@@ -281,8 +287,8 @@ function openTask(title, date, category, task){
 function choreCards(){
  return chores.map(([icon,title,date],i)=>{
   if(completed.has(i))return null;
-  const tile=button('','tile',()=>{if(tile.longPressed){tile.longPressed=false;return}completed.add(i);renderTasks();toast('已完成 · '+title)});
-  tile.setAttribute('aria-label','完成 '+title);tile.append(make('span',icon),make('strong',title),make('small',date));
+  const tile=button('','tile',()=>{if(tile.longPressed){tile.longPressed=false;return}completed.add(i);monthChoreCounts[i]=(monthChoreCounts[i]||0)+1;renderTasks();toast('已完成 · '+title)});
+  tile.setAttribute('aria-label','完成 '+title);tile.append(make('span',icon),make('strong',title),make('small','本月已做 '+(monthChoreCounts[i]||0)+' 次'));
   let timeout;function cancel(){clearTimeout(timeout)}
   tile.onpointerdown=()=>{tile.longPressed=false;timeout=setTimeout(()=>{tile.longPressed=true;openTask(title,date,'家务')},550)};
   tile.onpointerup=cancel;tile.onpointercancel=cancel;tile.onpointerleave=cancel;
@@ -348,7 +354,7 @@ function capture(kind){
  field.placeholder=isShop?'心愿名称':isChore?'家务名称':'事项名称';
  body.append(field);
  const detail=make('textarea');
- if(isShop){detail.placeholder='心愿详情（选填）';body.append(detail)}
+ if(isShop){$('sheet').classList.add('large-wish');detail.placeholder='心愿详情（选填）';body.append(detail)}
  const category=make('select');
  if(!isShop&&!isChore){
   for(const [key,label] of Object.entries(taskCategories).filter(([key])=>key!=='all'))category.add(new Option(label,key));
@@ -369,7 +375,7 @@ $('addPrimary').onclick=()=>capture(view==='shopping'?'wish':'task');
 $('addHousework').onclick=()=>capture('chore');
 function editWishDescription(wish,redraw){
  const body=openSheet('编辑心愿'), name=make('input','','basicInput'), detail=make('textarea'), actions=make('div','','actions');
- name.placeholder='心愿名称';name.value=wish.name;
+ $('sheet').classList.add('large-wish');name.placeholder='心愿名称';name.value=wish.name;
  detail.placeholder='心愿详情（选填）';detail.value=wish.detail;
  actions.append(button('取消','subtle',redraw),button('保存','primary',()=>{
   if(!name.value.trim()){name.focus();return}
@@ -421,7 +427,7 @@ function settingsSwitch(title,id,checked,onChange){
  input.id=id;input.type='checkbox';input.checked=checked;input.onchange=()=>onChange(input.checked);row.append(input);return row;
 }
 $('settings').onclick=()=>{
- const body=openSheet('个人设置'), gallery=make('a','桌面小部件 · 查看三种样式','gallery subtle');
+ const body=openSheet('个人设置'), gallery=make('a','桌面小部件 · 查看和试用','gallery subtle');
  gallery.href='widget-styles-draft.html';
  body.append(
   settingsSwitch('显示班/假文字','showWorkLabel',showWorkLabel,checked=>{
