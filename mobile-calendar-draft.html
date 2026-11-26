@@ -21,14 +21,22 @@ textarea,select{background:#fffdf9;border:1px solid #bdcabb;border-radius:12px;p
 .taskpage,.profile,.generic{padding:15px 16px 102px;overflow:auto}.page-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.profile h1,.generic h1{margin-bottom:14px}
 .chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:4px 0 6px}.chips button{white-space:nowrap;font-size:12px;min-height:32px;border-radius:100px;padding:4px 11px;background:#f0f0e8}.chips button[aria-pressed=true]{background:var(--sage);color:#28563e;font-weight:700}.tasktools{display:flex;align-items:center;gap:8px}.tasktools .chips{min-width:0;flex:1}.tasktools>button{flex:none}.taskrows{display:grid;gap:7px;margin-top:10px}.taskline{display:flex;align-items:center;gap:4px;min-height:50px;padding:0 10px 0 3px;border-radius:12px;background:#edf2e9;border-left:3px solid #82aa91}.taskline.study{background:#efebf7;border-color:#a799c6}.taskline.done{background:#edf0ea;border-color:#b8c5b9;color:#65746b}.check{width:39px;min-height:44px;color:var(--green);font-size:20px}.taskname{flex:1;text-align:left;padding:6px 2px;font-weight:600}.daylabel{font-size:11px;color:var(--soft);white-space:nowrap}.taskpage .tiles{margin-top:10px}.subheading{font-size:13px;color:var(--soft);margin-top:13px}.entry{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:#fffdf7;border:1px solid var(--line);border-radius:16px;min-height:67px;padding:11px 13px;margin:8px 0}.entry-icon{display:grid;place-items:center;width:35px;height:35px;border-radius:11px;background:var(--sage);color:var(--green);font-size:18px}.entry>span:nth-child(2){flex:1}.entry strong,.entry small{display:block}.entry small{font-size:12px;color:var(--soft)}.entry .arrow{color:var(--green)}.nav button{min-width:0;padding-inline:2px;font-size:11px;white-space:nowrap}.nav b{font-size:18px;height:25px}
 .quick{position:absolute;right:15px;bottom:calc(68px + env(safe-area-inset-bottom));z-index:3;display:flex;align-items:flex-end;flex-direction:column;gap:8px}.quick-toggle{width:54px;height:54px;border-radius:17px;background:var(--green);color:#fff;font-size:28px;box-shadow:0 4px 14px #234e3a38}.quick-actions{display:grid;gap:4px;padding:6px;background:#fffef9;border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 16px #24423328}.quick-actions button{min-height:39px;text-align:left;padding:6px 12px;font-size:14px}.basicInput{width:100%;border:1px solid #bdcabb;border-radius:12px;padding:10px;background:#fffdf9;color:var(--ink);font:inherit}
+
+#calendar .monthbar{min-height:46px;padding:4px 7px 2px;gap:1px}#calendar .monthbar h1{font-size:23px;margin-left:4px}#calendar .year{font-size:11px;margin-right:auto;margin-left:4px}
+#calendar .monthbar .plain{min-width:34px;padding-inline:4px}#calendar .monthbar #today{min-width:42px;font-size:12px}#calendar .monthbar .scale{margin-left:3px}#calendar .monthbar .scale button{min-width:30px;min-height:32px}#calendar .monthbar .scale span{font-size:10px;min-width:26px}
+.cell.workday{background:#f0f6fc}.cell.holiday{background:#fff1e8}.cell.other.workday{background:#e9eff5}.cell.other.holiday{background:#f6ede5}.cell.selected{box-shadow:inset 0 0 0 1.5px #75a18a}.weekdays{padding:3px 0}
+.wish-card{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fffdf8;border-radius:16px;padding:13px 14px;margin:8px 0}.wish-card strong,.wish-card span,.wish-card small{display:block}.wish-card span{margin:3px 0;font-size:14px}.wish-card small{color:var(--soft)}.detail-heading{margin-top:5px;font-size:15px}.subtask{display:flex;align-items:center;gap:7px;min-height:45px;background:#eef2e9;border-radius:10px;padding:2px 9px}.subtask input{accent-color:var(--green);width:17px;height:17px}.subtask button{text-align:left;flex:1}.subtask.done button{color:var(--soft);text-decoration:line-through}.taskline.child{margin-left:13px}
 </style>
 </head>
 <body>
 <div class="phone">
   <header class="top"><span class="draft">拯救ADHD · 手机预览</span></header>
   <main id="calendar" hidden>
-    <div class="monthbar"><h1 id="month"></h1><span class="year" id="year"></span><button class="plain" id="today">今天</button><button class="plain" id="prev" aria-label="上个月">‹</button><button class="plain" id="next" aria-label="下个月">›</button></div>
-    <div class="tools"><button class="pill push" id="filter">全部类别</button><div class="scale"><button id="smaller" aria-label="缩小行高">−</button><span id="ratio">100%</span><button id="larger" aria-label="放大行高">＋</button></div></div>
+    <div class="monthbar"><h1 id="month"></h1><span class="year" id="year"></span>
+      <button class="plain" id="prev" aria-label="上个月">‹</button><button class="plain" id="today">今天</button><button class="plain" id="next" aria-label="下个月">›</button>
+      <button class="plain" id="filter" aria-label="日历类别筛选">☷</button>
+      <div class="scale"><button id="smaller" aria-label="缩小行高">−</button><span id="ratio">100%</span><button id="larger" aria-label="放大行高">＋</button></div>
+    </div>
     <div class="weekdays" aria-hidden="true"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
     <section class="scroller" id="grid" aria-label="七列月历"></section>
     <div class="status"><button id="dayButton"></button><span class="quiet">双指张开拉高</span></div>
@@ -41,23 +49,22 @@ textarea,select{background:#fffdf9;border:1px solid #bdcabb;border-radius:12px;p
     <details class="finished"><summary id="doneCount">已完成 · 0</summary><div id="doneItems"></div></details>
   </main>
   <main id="timer" class="generic" hidden><h1>计时</h1><div id="timerEntries"></div></main>
-  <main id="shopping" class="generic" hidden><h1>购物</h1><div id="shoppingEntries"></div></main>
-  <main id="review" class="generic" hidden><h1>复盘</h1><div id="reviewEntries"></div></main>
+  <main id="shopping" class="generic" hidden><h1>心愿清单</h1><div id="shoppingEntries"></div></main>
   <main id="mine" class="profile" hidden>
     <h1>我的</h1>
     <button class="entry" id="settings"><span class="entry-icon">⚙</span><span><strong>个人设置</strong><small>通知、准确提醒和计时浮窗</small></span><span class="arrow">›</span></button>
     <button class="entry" id="sync"><span class="entry-icon">↻</span><span><strong>WebDAV 同步</strong><small>账户、自动同步和冲突处理</small></span><span class="arrow">›</span></button>
     <button class="entry" id="import"><span class="entry-icon">↓</span><span><strong>导入手机日历</strong><small id="importStatus">读取小米日历等系统日程</small></span><span class="arrow">›</span></button>
     <button class="entry" id="manage"><span class="entry-icon">▣</span><span><strong>管理分类</strong><small>名称、图标和颜色</small></span><span class="arrow">›</span></button>
+    <button class="entry" id="review"><span class="entry-icon">▥</span><span><strong>复盘</strong><small>查看完成记录和统计</small></span><span class="arrow">›</span></button>
   </main>
   <div class="quick" id="quick">
     <div id="quickActions" class="quick-actions" hidden><button id="addPrimary">添加事项</button><button data-idea>记想法</button></div>
     <button id="quickToggle" class="quick-toggle" aria-label="快捷添加" aria-expanded="false">＋</button>
   </div>
   <nav class="nav" aria-label="主导航">
-    <button data-nav="tasks" aria-current="page"><b>☑</b>事项</button><button data-nav="timer"><b>◷</b>计时</button>
-    <button data-nav="calendar"><b>▦</b>日历</button><button data-nav="shopping"><b>🛒</b>购物</button>
-    <button data-nav="review"><b>▥</b>复盘</button><button data-nav="mine"><b>◉</b>我的</button>
+    <button data-nav="tasks" aria-current="page"><b>☑</b>事项</button><button data-nav="calendar"><b>▦</b>日历</button>
+    <button data-nav="timer"><b>◷</b>计时</button><button data-nav="shopping"><b>♡</b>心愿清单</button><button data-nav="mine"><b>◉</b>我的</button>
   </nav>
   <div id="toast" class="toast" role="status" hidden></div>
 </div>
@@ -95,7 +102,15 @@ const localTasks=[
  {id:'study-2',title:'读完第三章',kind:'study',date:new Date(2026,10,27),minutes:30,energy:1},
  {id:'general-3',title:'整理照片',kind:'general',date:null,minutes:45,energy:2}
 ];
-const shoppingItems=[{name:'猫砂',done:false},{name:'咖啡豆',done:false}];
+localTasks.push(
+ {id:'study-child-1',parentId:'study-1',title:'列出讨论提纲',kind:'study',date:null,minutes:10,energy:0},
+ {id:'study-child-2',parentId:'study-1',title:'选一段想分享的文字',kind:'study',date:null,minutes:5,energy:0}
+);
+const shoppingItems=[
+ {name:'周末短途旅行',detail:'想找一个周末去附近的镇子走走，顺便拍些照片。',done:false,
+  steps:[{title:'查一查路线',done:true},{title:'选个周末',done:false}]},
+ {name:'换一台咖啡机',detail:'放得下，日常清洗方便。',done:false,steps:[]}
+];
 const taskCategories={all:'全部',cleaning:'家务',general:'事项',study:'学习'};
 const dateScopes={all:'全部日期',today:'今天',week:'本周',none:'无日期'};
 
@@ -117,7 +132,7 @@ function openSheet(title){
 function toast(message){$('toast').textContent=message;$('toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').hidden=true,2300)}
 function renderGrid(){
  $('month').textContent=(page.getMonth()+1)+'月';$('year').textContent=page.getFullYear();
- $('filter').textContent=selectedKinds.size===1?kindName[[...selectedKinds][0]]:selectedKinds.size?'已选 '+selectedKinds.size+' 类':'全部类别';
+ $('filter').textContent=selectedKinds.size?'☷·':'☷';$('filter').setAttribute('aria-label',selectedKinds.size?'日历类别筛选，已选 '+selectedKinds.size+' 类':'日历类别筛选，全部类别');
  const base=Math.max(58,Math.floor($('grid').clientHeight/6));const height=Math.round(base*zoom);
  $('grid').style.setProperty('--row',height+'px');$('ratio').textContent=Math.round(zoom*100)+'%';
  $('smaller').disabled=zoom<=1;$('larger').disabled=zoom>=2.8;
@@ -129,6 +144,7 @@ function renderGrid(){
    const day=new Date(start);day.setDate(start.getDate()+row*7+col);
    const cell=make('div','','cell');cell.tabIndex=0;cell.setAttribute('role','button');cell.setAttribute('aria-label',dateKey(day)+' 日程');
    if(day.getMonth()!==page.getMonth())cell.classList.add('other');
+   cell.classList.add(col>4?'holiday':'workday');
    if(same(day,sampleToday))cell.classList.add('today');
    if(same(day,selection))cell.classList.add('selected');
    const open=()=>{selection=day;renderGrid();openDay(day)};
@@ -196,9 +212,41 @@ $('import').onclick=()=>{
  const card=make('div','','panel');card.append(make('strong','小米日历 · 个人日程'), make('p','牙科复诊、周六羽毛球、取报告'));
  body.append(card,button(imported?'重新导入示例':'导入 3 条示例日程','primary',()=>{imported=true;selectedKinds.clear();$('importStatus').textContent='本机已导入 3 条示例日程';$('sheet').close();toast('已导入 3 条示例日程')}));
 };
-function openTask(title, date, category){
+function addSubtask(done, onReturn, existing){
+ const body=openSheet(existing?'编辑子任务':'添加子任务'), input=make('input','','basicInput'), actions=make('div','','actions');
+ input.placeholder='子任务名称';input.value=existing?.title||'';
+ actions.append(button('取消','subtle',onReturn),button('保存','primary',()=>{
+  const title=input.value.trim();if(!title){input.focus();return}
+  done(title);onReturn();
+ }));
+ body.append(input,actions);
+ input.focus();
+}
+function subtaskRow(title, done, toggle, edit){
+ const row=make('div','','subtask'+(done?' done':'')), check=make('input');
+ check.type='checkbox';check.checked=done;check.setAttribute('aria-label','完成 '+title);
+ check.onchange=()=>toggle(check.checked);
+ row.append(check,button(title,'',edit));
+ return row;
+}
+function openTask(title, date, category, task){
  const body=openSheet(title);
  body.append(make('p',(category||'事项')+' · '+(date||'无日期'),'panel'));
+ const record=task||localTasks.find(t=>t.title===title);
+ if(!record)return;
+ const redraw=()=>{renderTasks();openTask(title,date,category,record)};
+ const own=subtaskRow('完成主任务',!!record.finished,done=>{record.finished=done?sampleToday:null;redraw()},()=>{});
+ own.querySelector('input').setAttribute('aria-label','完成主任务');
+ body.append(own);
+ const children=localTasks.filter(t=>t.parentId===record.id);
+ body.append(make('strong','子任务 · '+children.filter(t=>t.finished).length+'/'+children.length,'detail-heading'));
+ for(const child of children)body.append(subtaskRow(child.title,!!child.finished,done=>{
+  child.finished=done?sampleToday:null;redraw();
+ },()=>openTask(child.title,child.date?dateKey(child.date):'',taskCategories[child.kind],child)));
+ const actions=make('div','','actions');actions.append(button('＋ 子任务','primary',()=>addSubtask(name=>{
+  localTasks.push({id:'new-'+nextTaskId++,parentId:record.id,title:name,kind:record.kind,date:null,energy:0});
+ },redraw)));
+ body.append(actions);
 }
 function choreCards(){
  return chores.map(([icon,title,date],i)=>{
@@ -232,15 +280,16 @@ function renderTasks(){
  const due=t=>t.date?t.date.getMonth()+1+'月'+t.date.getDate()+'日':'无日期';
  const shown=localTasks.filter(t=>!t.finished&&taskMatches(t));
  $('pickTask').disabled=!shown.length;
- $('pickTask').onclick=()=>{const t=shown[0];if(t)openTask(t.title,due(t),taskCategories[t.kind])};
+ $('pickTask').onclick=()=>{const t=shown[0];if(t)openTask(t.title,due(t),taskCategories[t.kind],t)};
  if(taskKind==='cleaning'){
   const tiles=make('div','','tiles');tiles.append(...choreCards());
   rows.append(make('p','点图标完成 · 长按查看详情','subheading'),tiles);
  }
  for(const t of shown){
-  const line=make('div','','taskline '+t.kind), check=button('○','check',()=>{t.finished=sampleToday;renderTasks();toast('已完成 · '+t.title)});
+  const isChild=t.parentId&&shown.some(parent=>parent.id===t.parentId);
+  const line=make('div','','taskline '+t.kind+(isChild?' child':'')), check=button('○','check',()=>{t.finished=sampleToday;renderTasks();toast('已完成 · '+t.title)});
   check.setAttribute('aria-label','完成 '+t.title);
-  line.append(check,button(t.title,'taskname',()=>openTask(t.title,due(t),taskCategories[t.kind])),make('span',due(t),'daylabel'));
+  line.append(check,button(t.title,'taskname',()=>openTask(t.title,due(t),taskCategories[t.kind],t)),make('span',due(t),'daylabel'));
   rows.append(line);
  }
  if(!shown.length&&taskKind!=='cleaning')rows.append(make('p','没有符合筛选条件的待办','quiet'));
@@ -264,9 +313,11 @@ function setQuick(expanded){
 $('quickToggle').onclick=()=>setQuick($('quickActions').hidden);
 $('addPrimary').onclick=()=>{
  setQuick(false);
- const isShop=view==='shopping', body=openSheet(isShop?'加入购物清单':'添加事项'), field=make('input','','basicInput');
- field.placeholder=isShop?'想买什么？':'事项名称';
+ const isShop=view==='shopping', body=openSheet(isShop?'添加心愿':'添加事项'), field=make('input','','basicInput');
+ field.placeholder=isShop?'心愿名称':'事项名称';
  body.append(field);
+ const detail=make('textarea');
+ if(isShop){detail.placeholder='心愿详情（选填）';body.append(detail)}
  const category=make('select');
  if(!isShop){
   for(const [key,label] of Object.entries(taskCategories).filter(([key])=>key!=='all'))category.add(new Option(label,key));
@@ -276,14 +327,33 @@ $('addPrimary').onclick=()=>{
  }
  body.append(button('添加','primary',()=>{
   const title=field.value.trim();if(!title){field.focus();return}
-  if(isShop){shoppingItems.push({name:title,done:false});renderShopping()}
+  if(isShop){shoppingItems.push({name:title,detail:detail.value.trim(),done:false,steps:[]});renderShopping()}
   else {localTasks.push({id:'new-'+nextTaskId++,title,kind:category.value,date:view==='calendar'?selection:null,energy:0});if(view==='calendar')renderGrid();else renderTasks()}
   $('sheet').close();toast('已添加');
  }));
  field.focus();
 };
+function wishDetail(wish){
+ const body=openSheet('心愿详情'), redraw=()=>{renderShopping();wishDetail(wish)};
+ const heading=make('div','','panel');heading.append(make('strong',wish.name));
+ if(wish.detail)heading.append(make('p',wish.detail));
+ body.append(heading,subtaskRow('标记已实现',wish.done,done=>{wish.done=done;redraw()},()=>{}));
+ body.append(make('strong','子任务 · '+wish.steps.filter(step=>step.done).length+'/'+wish.steps.length,'detail-heading'));
+ wish.steps.forEach(step=>body.append(subtaskRow(step.title,step.done,done=>{step.done=done;redraw()},()=>addSubtask(title=>{
+  step.title=title;
+ },redraw,step))));
+ const actions=make('div','','actions');actions.append(button('＋ 子任务','primary',()=>addSubtask(title=>wish.steps.push({title,done:false}),redraw)));
+ body.append(actions);
+}
 function renderShopping(){
- $('shoppingEntries').replaceChildren(...shoppingItems.map(item=>button((item.done?'✓ ':'○ ')+item.name,'entry',()=>{item.done=!item.done;renderShopping()})));
+ const items=shoppingItems.map(item=>{
+  const card=button('','wish-card',()=>wishDetail(item));
+  card.append(make('strong',(item.done?'✓ ':'')+item.name));
+  if(item.detail)card.append(make('span',item.detail));
+  if(item.steps.length)card.append(make('small',item.steps.filter(step=>step.done).length+'/'+item.steps.length+' 子任务'));
+  return card;
+ });
+ $('shoppingEntries').replaceChildren(...items);
 }
 let timerStarted=0,timerElapsed=0;
 const timerDisplay=make('strong','00:00'), timerButton=button('开始计时','primary',()=>{
@@ -321,12 +391,13 @@ function navigate(name){
  }
  setQuick(false);
  $('quick').hidden=!['tasks','calendar','shopping'].includes(name);
- $('addPrimary').textContent=name==='shopping'?'加入购物清单':'添加事项';
+ $('addPrimary').textContent=name==='shopping'?'添加心愿':'添加事项';
  if(name==='calendar')renderGrid();
  if(name==='tasks')renderTasks();
  if(name==='shopping')renderShopping();
- if(name==='review')$('reviewEntries').replaceChildren(make('div','已完成 '+(completed.size+localTasks.filter(t=>t.finished).length)+' 项','panel'));
+
 }
+$('review').onclick=()=>openSheet('复盘').append(make('div','已完成 '+(completed.size+localTasks.filter(t=>t.finished).length)+' 项','panel'));
 document.querySelectorAll('[data-nav]').forEach(el=>el.onclick=()=>navigate(el.dataset.nav));
 function idea(){
  setQuick(false);
