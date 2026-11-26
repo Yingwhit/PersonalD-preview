@@ -25,26 +25,29 @@
 <article aria-label="家务小部件">
  <div class="option"><h2>家务</h2><span class="size">4×3</span></div>
  <section class="sample chores-surface" id="choresSurface"><div class="bar"><strong>家务</strong><span class="pill" id="choreCount"></span></div><div class="tiles" id="chores"></div></section>
- <div class="widget-settings">
+ <details class="widget-settings"><summary>桌面小部件设置（演示）</summary>
   <label>高度 <select id="choreRows"><option value="1">1 行</option><option value="2">2 行</option><option selected value="3">3 行</option></select></label>
   <label>背景不透明度 <select id="choreOpacity"><option>25%</option><option>50%</option><option>75%</option><option selected>100%</option></select></label>
- </div>
+ </details>
 </article>
 <article aria-label="任务周视图">
  <div class="option"><h2>任务周视图</h2><span class="size">约 4×3 格</span></div>
- <section class="sample"><div class="bar"><strong>本周</strong><small>11 月 23–29 日</small></div><div class="week" id="week"></div><p class="summary" id="weekSummary"></p></section>
+ <section class="sample"><div class="bar"><button class="week-nav" id="taskPrev" aria-label="上一周">‹</button><button id="taskRange" class="range" aria-label="回到本周"></button><button class="week-nav" id="taskNext" aria-label="下一周">›</button></div><div class="week" id="week"></div><p class="summary" id="weekSummary"></p></section>
 </article>
 <article aria-label="任务列表">
  <div class="option"><h2>任务列表</h2><span class="size">不含家务</span></div>
  <section class="sample">
- <div class="bar"><button class="week-nav" id="taskPrev" aria-label="任务列表上一周">‹</button><button id="taskRange" class="range" aria-label="回到本周"></button><button class="week-nav" id="taskNext" aria-label="任务列表下一周">›</button></div>
+
  <div class="rows" id="tasks"></div></section>
- <p class="caption">左右切周，点日期范围回本周；点方框完成。</p>
+ <p class="caption">点方框完成；包含无日期的待办。</p>
 </article>
-<article aria-label="随机按钮">
- <div class="option"><h2>两个随机按钮</h2><span class="size">各约 1×1 格</span></div>
- <section class="sample"><div class="buttons"><button class="random" id="houseworkPick"><span>🎲</span>随机家务</button><button class="random" id="taskPick"><span>🎲</span>随机任务</button></div><p class="random-result" id="result" aria-live="polite">点按钮挑一件未完成的事项。</p></section>
- <p class="caption">点按只挑选待办，是否完成由你勾选。</p>
+<article aria-label="随机小部件">
+ <div class="option"><h2>随机小部件</h2><span class="size">各约 1×1 格，可分别添加</span></div>
+ <div class="buttons">
+  <div><button class="random" id="houseworkPick"><span>🎲</span>随机家务</button><p class="random-result" id="houseworkResult" aria-live="polite"></p></div>
+  <div><button class="random" id="taskPick"><span>🎲</span>随机任务</button><p class="random-result" id="taskResult" aria-live="polite"></p></div>
+ </div>
+ <p class="caption">两个独立的小部件，点按只挑选，不会自动完成。</p>
 </article>
 </main>
 <script>
@@ -66,44 +69,45 @@ function renderChores(){
   const card=text('button','');card.className='tile';card.setAttribute('aria-label','完成 '+t.title);
   const icon=text('span',t.icon);icon.className='icon';
   card.append(icon,text('span',t.title),text('small','本月已做 '+t.count+' 次'));
-  card.onclick=()=>{t.done=true;t.count++;$('result').textContent='已完成 '+t.title+' · 本月已做 '+t.count+' 次';renderChores()};
+  card.onclick=()=>{t.done=true;t.count++;renderChores()};
   return card;
  }));
 }
 function renderWeek(){
  const days=['一','二','三','四','五','六','日'];
+ const start=23+taskWeek*7,end=start+6;
+ $('taskRange').textContent=formatDay(start)+' – '+formatDay(end);
  $('week').replaceChildren(...days.map((label,i)=>{
-  const day=i+23, group=tasks.filter(t=>!t.done&&t.date===day), btn=text('button','');
+  const day=i+start, group=tasks.filter(t=>!t.done&&t.date===day), btn=text('button','');
   btn.setAttribute('aria-pressed',day===selectedDay);
-  btn.append(text('span',label+' '+day),text('span',group[0]?.title||'—'));
+  btn.append(text('span',label+' '+new Date(2026,10,day).getDate()),text('span',group[0]?.title||'—'));
   btn.onclick=()=>{selectedDay=day;renderWeek()};
   return btn;
  }));
  const titles=tasks.filter(t=>!t.done&&t.date===selectedDay).map(t=>t.title);
- $('weekSummary').textContent='11 月 '+selectedDay+' 日 · '+(titles.join('、')||'没有待办');
+ $('weekSummary').textContent=formatDay(selectedDay)+' · '+(titles.join('、')||'没有待办');
 }
+function formatDay(d){const date=new Date(2026,10,d);return (date.getMonth()+1)+'/'+date.getDate()}
 function renderTasks(){
- const start=23+taskWeek*7,end=start+6;
- const fmt=d=>{const date=new Date(2026,10,d);return (date.getMonth()+1)+'/'+date.getDate()};
- $('taskRange').textContent=fmt(start)+' – '+fmt(end);
- const pending=tasks.filter(t=>!t.done&&t.date!=null&&t.date>=start&&t.date<=end);
+ const pending=tasks.filter(t=>!t.done);
  $('tasks').replaceChildren(...pending.map(t=>{
   const row=text('label','');row.className='row';
   const input=document.createElement('input');input.type='checkbox';input.setAttribute('aria-label','完成 '+t.title);
   input.onchange=()=>{t.done=true;renderTasks();renderWeek()};
-  row.append(input,text('strong',t.title),text('small',fmt(t.date)));return row;
+  row.append(input,text('strong',t.title),text('small',t.date==null?'无日期':formatDay(t.date)));return row;
  }));
  if(!pending.length)$('tasks').append(text('p','暂时没有待办'));
 }
-function pick(entries,empty){
+function pick(entries,empty,result){
  const pending=entries.filter(t=>!t.done), choice=pending[Math.floor(Math.random()*pending.length)];
- $('result').textContent=choice?'抽到：'+choice.title:empty;
+ $(result).textContent=choice?'抽到：'+choice.title:empty;
 }
-$('houseworkPick').onclick=()=>pick(chores,'没有待做家务');
-$('taskPick').onclick=()=>pick(tasks,'没有待办任务');
+$('houseworkPick').onclick=()=>pick(chores,'没有待做家务','houseworkResult');
+$('taskPick').onclick=()=>pick(tasks,'没有待办任务','taskResult');
 $('choreRows').onchange=renderChores;
 $('choreOpacity').onchange=()=>$('choresSurface').style.setProperty('--opacity',parseInt($('choreOpacity').value,10)/100);
-$('taskPrev').onclick=()=>{taskWeek--;renderTasks()};$('taskNext').onclick=()=>{taskWeek++;renderTasks()};$('taskRange').onclick=()=>{taskWeek=0;renderTasks()};
+function shift(delta){taskWeek=delta===0?0:taskWeek+delta;selectedDay=delta===0?26:23+taskWeek*7;renderWeek()}
+$('taskPrev').onclick=()=>shift(-1);$('taskNext').onclick=()=>shift(1);$('taskRange').onclick=()=>shift(0);
 renderChores();renderWeek();renderTasks();
 </script>
 </body>
