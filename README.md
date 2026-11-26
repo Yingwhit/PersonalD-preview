@@ -7,6 +7,11 @@
 - 网页文件更新部署后，会自动检查更新；已保存记录保留，打开的表单会延后刷新。
 - Android 的后台计时、通知和权限行为仍需在实际 App 中验证。
 
+当前手机草稿和样式图可独立打开：
+
+- [手机版交互预览](mobile-calendar-draft.html)
+- [桌面小部件样式对照](widget-styles-draft.html) · [整张效果图](widget-styles-draft.png)
+
 ## GitHub Pages
 
 仓库 Settings → Pages → Build and deployment：选择 Deploy from a branch，分支 `main`，目录 `/ (root)`。
