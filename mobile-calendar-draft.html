@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fcfaf4">
+<title>拯救ADHD · 手机预览</title>
+<style>
+:root{color-scheme:light;font:16px/1.45 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;--ink:#243e34;--soft:#66766c;--paper:#fcfaf4;--line:#e3e9df;--green:#386b53;--sage:#e1eee3}
+*{box-sizing:border-box}body{margin:0;background:#e8eee6;color:var(--ink)}button,textarea,select{font:inherit;color:inherit}button{border:0;background:none;cursor:pointer}button:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--green);outline-offset:2px}button:disabled{opacity:.45;cursor:default}[hidden]{display:none!important}
+.phone{width:min(100%,460px);height:100dvh;min-height:500px;margin:auto;background:var(--paper);display:flex;flex-direction:column;position:relative;overflow:hidden}
+@media(min-width:600px){.phone{height:min(916px,calc(100dvh - 36px));margin:18px auto;border:1px solid #ccd9cd;border-radius:28px;box-shadow:0 18px 64px #233b2924}}
+.top{display:flex;align-items:center;justify-content:space-between;padding:11px 17px 8px;border-bottom:1px solid #e8eade}.draft{font-size:12px;letter-spacing:.04em;color:var(--soft)}.pill,.subtle,.primary{min-height:37px;padding:6px 13px;border-radius:100px;font-size:13px;font-weight:650;white-space:nowrap}.pill{background:var(--sage);color:#2b5b44}.subtle{background:#efefe6}.primary{background:var(--green);color:white}.plain{min-width:36px;min-height:36px;color:var(--green)}.quiet{font-size:12px;color:var(--soft)}
+main{min-height:0;flex:1;display:flex;flex-direction:column}.monthbar{display:flex;align-items:center;gap:6px;padding:12px 14px 3px}h1,h2,p{margin:0}h1{font-size:32px;letter-spacing:-.045em;line-height:1.18}h2{font-size:22px}.year{color:var(--soft);font-size:13px;margin-right:auto}.tools{display:flex;align-items:center;gap:6px;padding:4px 13px 7px}.push{margin-right:auto}.scale{display:flex;align-items:center;border-radius:100px;background:#efefe6}.scale button{min-width:31px;min-height:35px;font-weight:700}.scale span{font-size:11px;color:var(--soft);min-width:32px;text-align:center}.weekdays,.row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}.weekdays{padding:5px 0;color:var(--soft);font-size:12px;text-align:center;background:#f6f8ef}
+.scroller{min-height:0;flex:1;overflow:auto;touch-action:pan-y;overscroll-behavior:contain;background:#fafcf8}.row{height:var(--row,80px)}.cell{min-width:0;overflow:hidden;border-top:1px solid var(--line);border-right:1px solid #edf0e8;padding:4px 2px;text-align:center;cursor:pointer}.cell:last-child{border-right:0}.cell.other{background:#f0f3ed;color:#69756b}.cell.selected{background:#e9f1e6}.date{width:25px;height:25px;display:grid;place-items:center;margin:auto;font-size:14px;font-weight:650}.today .date{color:white;background:var(--green);border-radius:50%}.dayhint{font-size:10px;height:16px;color:#577687}.dayhint.off{color:#a2674c}.event{display:block;border-radius:4px;text-align:left;font-size:10px;line-height:18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:1px 0;padding:0 3px;background:#d7e9ef;color:#284e62}.event.study{background:#ece5f6;color:#4a3a6c}.event.done{background:#e8ebe4;color:#617168}.event.import{background:#e4e2fa;color:#54477d}.more{font-size:10px;color:var(--soft)}
+.status{min-height:43px;display:flex;align-items:center;justify-content:space-between;padding:2px 14px;border-top:1px solid var(--line);font-size:12px}.status button{padding:6px 0;color:var(--green);font-weight:700}.nav{display:flex;justify-content:stretch;background:#f4f6ec;border-top:1px solid var(--line);padding:5px 7px max(7px,env(safe-area-inset-bottom))}.nav button{flex:1;border-radius:12px;padding:5px 8px;font-size:12px;color:var(--soft)}.nav b{display:block;font-size:19px;font-weight:600}.nav button[aria-current=page]{background:#dcebdd;color:#234b37}
+.chores{padding:18px 16px;overflow:auto}.chores h1{margin-bottom:6px}.intro{color:var(--soft);font-size:13px;margin-bottom:18px}.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.tile{min-height:103px;border-radius:18px;border:1px solid #e1e9da;background:#eef3e8;padding:8px 4px;text-align:center}.tile span{display:block;font-size:28px}.tile strong{display:block;font-size:13px}.tile small{font-size:11px;color:var(--soft)}.finished{margin-top:17px;padding:12px 2px;border-top:1px solid var(--line);color:var(--soft);font-size:13px}.finished summary{cursor:pointer}.finished p{padding:7px 8px}
+dialog{max-height:calc(100dvh - 36px);width:min(100%,460px);border:0;border-radius:24px 24px 0 0;margin:auto auto 0;padding:12px 18px max(18px,env(safe-area-inset-bottom));background:var(--paper);color:var(--ink);box-shadow:0 -14px 46px #17291d30}dialog::backdrop{background:#18271d64}.handle{display:block;background:#c9d0c2;width:31px;height:4px;border-radius:4px;margin:0 auto 13px}.sheetheader,.actions{display:flex;align-items:center;justify-content:space-between;gap:8px}.sheetbody{margin:13px 0;display:grid;gap:9px}.panel{background:#eef2e9;padding:12px;border-radius:13px;font-size:14px}.panel strong{display:block}.panel p{color:var(--soft);margin-top:2px;font-size:12px}.actions{justify-content:flex-end}.actions .push{margin-right:auto}.quiet[role=status]{min-height:18px}
+textarea,select{background:#fffdf9;border:1px solid #bdcabb;border-radius:12px;padding:10px;width:100%}textarea{min-height:96px;resize:vertical}.calendarOptions{display:grid;gap:7px}.calendarOptions label{display:flex;gap:8px;align-items:center}.calendarOptions input{accent-color:var(--green)}.toast{position:absolute;bottom:70px;left:50%;translate:-50% 0;background:#254533;color:white;padding:8px 15px;border-radius:100px;font-size:13px;max-width:90%;white-space:nowrap;z-index:5}
+</style>
+</head>
+<body>
+<div class="phone">
+  <header class="top"><span class="draft">拯救ADHD · 手机预览</span><button class="pill" data-idea>＋ 记想法</button></header>
+  <main id="calendar">
+    <div class="monthbar"><h1 id="month"></h1><span class="year" id="year"></span><button class="plain" id="today">今天</button><button class="plain" id="prev" aria-label="上个月">‹</button><button class="plain" id="next" aria-label="下个月">›</button></div>
+    <div class="tools"><button class="pill push" id="filter">全部类别</button><button class="subtle" id="import">导入</button><div class="scale"><button id="smaller" aria-label="缩小行高">−</button><span id="ratio">100%</span><button id="larger" aria-label="放大行高">＋</button></div></div>
+    <div class="weekdays" aria-hidden="true"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+    <section class="scroller" id="grid" aria-label="七列月历"></section>
+    <div class="status"><button id="dayButton"></button><span class="quiet">双指张开拉高</span></div>
+  </main>
+  <main id="chores" class="chores" hidden>
+    <h1>家务</h1><p class="intro">点图标完成 · 长按查看详情</p>
+    <div class="tiles" id="tiles"></div>
+    <details class="finished"><summary id="doneCount">已完成 · 0</summary><div id="doneItems"></div></details>
+  </main>
+  <nav class="nav" aria-label="主导航"><button id="navCalendar" aria-current="page"><b>▦</b>日历</button><button id="navChores"><b>⌂</b>家务</button><button data-idea><b>✎</b>想法</button></nav>
+  <div id="toast" class="toast" role="status" hidden></div>
+</div>
+<dialog id="sheet"><span class="handle"></span><div class="sheetheader"><h2 id="sheetTitle"></h2><button class="plain" id="close" aria-label="关闭">✕</button></div><div class="sheetbody" id="sheetBody"></div></dialog>
+<script>
+const $ = id => document.getElementById(id);
+const sampleToday = new Date(2026,10,26);
+const same = (a,b) => a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+const dateKey = d => [d.getFullYear(),d.getMonth()+1,d.getDate()].join('-');
+const sampleEvents = {
+ '2026-11-17':[{title:'寄出退货',kind:'general',done:true}],
+ '2026-11-21':[{title:'摄影练习',kind:'study',done:true}],
+ '2026-11-24':[{title:'预约体检',kind:'general',done:true}],
+ '2026-11-25':[{title:'读书笔记',kind:'study',done:true}],
+ '2026-11-26':[{title:'准备读书会',kind:'study'},{title:'交材料',kind:'general'}],
+ '2026-11-27':[{title:'读完第三章',kind:'study'},{title:'领取快递',kind:'general'}],
+ '2026-11-28':[{title:'整理照片',kind:'general'}],
+ '2026-11-30':[{title:'月末复盘',kind:'general'}]
+};
+const importedEvents = {
+ '2026-11-26':[{title:'牙科复诊',kind:'import',time:'16:30'}],
+ '2026-11-28':[{title:'周六羽毛球',kind:'import',time:'10:00'}],
+ '2026-12-1':[{title:'取报告',kind:'import',time:'15:00'}]
+};
+const chores=[
+ ['🧹','扫地','今天'],['🐾','铲猫砂','今天'],['🧺','换床单','本周'],
+ ['🍽️','洗碗','今天'],['🧽','擦厨房台面','今天'],['🗑️','倒垃圾','今天']
+];
+let selection=sampleToday, page=new Date(2026,10,1), zoom=1, imported=false, selectedKinds=new Set(), completed=new Set(), notes=[];
+try { notes=JSON.parse(localStorage.getItem('personald-mobile-draft-notes')||'[]'); } catch {}
+const kindName={general:'事项',study:'学习'};
+function make(tag,text,cls){const el=document.createElement(tag);if(text)el.textContent=text;if(cls)el.className=cls;return el}
+function button(label,cls,run){const b=make('button',label,cls);b.onclick=run;return b}
+function eventsFor(day){
+ return (sampleEvents[dateKey(day)]||[]).filter(e=>!selectedKinds.size||selectedKinds.has(e.kind)).concat(
+   imported&&!selectedKinds.size ? importedEvents[dateKey(day)]||[] : []);
+}
+function openSheet(title){
+ $('sheetTitle').textContent=title;$('sheetBody').replaceChildren();
+ if(!$('sheet').open)$('sheet').showModal();return $('sheetBody');
+}
+function toast(message){$('toast').textContent=message;$('toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').hidden=true,2300)}
+function renderGrid(){
+ $('month').textContent=(page.getMonth()+1)+'月';$('year').textContent=page.getFullYear();
+ $('filter').textContent=selectedKinds.size===1?kindName[[...selectedKinds][0]]:selectedKinds.size?'已选 '+selectedKinds.size+' 类':'全部类别';
+ const base=Math.max(58,Math.floor($('grid').clientHeight/6));const height=Math.round(base*zoom);
+ $('grid').style.setProperty('--row',height+'px');$('ratio').textContent=Math.round(zoom*100)+'%';
+ $('smaller').disabled=zoom<=1;$('larger').disabled=zoom>=2.8;
+ const start=new Date(page);start.setDate(1-(page.getDay()+6)%7);
+ const weeks=[];
+ for(let row=0;row<6;row++){
+  const line=make('div','','row');
+  for(let col=0;col<7;col++){
+   const day=new Date(start);day.setDate(start.getDate()+row*7+col);
+   const cell=make('div','','cell');cell.tabIndex=0;cell.setAttribute('role','button');cell.setAttribute('aria-label',dateKey(day)+' 日程');
+   if(day.getMonth()!==page.getMonth())cell.classList.add('other');
+   if(same(day,sampleToday))cell.classList.add('today');
+   if(same(day,selection))cell.classList.add('selected');
+   const open=()=>{selection=day;renderGrid();openDay(day)};
+   cell.onclick=open;cell.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}};
+   cell.append(make('span',day.getDate(),'date'),make('div',col>4?'假':'班','dayhint'+(col>4?' off':'')));
+   const events=eventsFor(day), slots=Math.max(1,Math.floor((height-46)/19));
+   const count=events.length>slots&&slots>1?slots-1:slots;
+   events.slice(0,count).forEach(e=>cell.append(make('span',(e.done?'✓ ':'')+e.title,'event '+e.kind+(e.done?' done':''))));
+   if(events.length>count&&slots>1)cell.append(make('span','+'+(events.length-count),'more'));
+   line.append(cell);
+  }
+  weeks.push(line);
+ }
+ $('grid').replaceChildren(...weeks);
+ $('dayButton').textContent=(selection.getMonth()+1)+'月'+selection.getDate()+'日 · '+eventsFor(selection).length+' 项 ›';
+}
+function openDay(day){
+ const body=openSheet((day.getMonth()+1)+'月'+day.getDate()+'日');
+ const events=eventsFor(day);
+ if(!events.length)body.append(make('p','这天没有可显示的日程。','quiet'));
+ for(const e of events){
+  const item=make('div','','panel');item.append(make('strong',(e.done?'✓ ':'')+e.title),make('p',e.kind==='import'?'小米日历示例 · '+e.time:kindName[e.kind]+(e.done?' · 已完成':'')));body.append(item);
+ }
+}
+function setMonth(delta){page=new Date(page.getFullYear(),page.getMonth()+delta,1);selection=new Date(page);$('grid').scrollTop=0;renderGrid()}
+$('prev').onclick=()=>setMonth(-1);$('next').onclick=()=>setMonth(1);
+$('today').onclick=()=>{page=new Date(2026,10,1);selection=sampleToday;$('grid').scrollTop=0;renderGrid()};
+$('dayButton').onclick=()=>openDay(selection);
+function scale(next, anchor=$('grid').clientHeight/2){
+ const view=$('grid'), position=view.scrollTop+anchor, previous=zoom;
+ zoom=Math.min(2.8,Math.max(1,next));renderGrid();view.scrollTop=position*(zoom/previous)-anchor;
+}
+$('larger').onclick=()=>scale(zoom*1.28);$('smaller').onclick=()=>scale(zoom/1.28);
+let pinchDistance=0, multitouch=false;
+function touchScale(e){
+ if(e.touches.length!==2){pinchDistance=0;return}
+ e.preventDefault();multitouch=true;
+ const [a,b]=e.touches;const distance=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+ if(pinchDistance>12&&distance>12)scale(zoom*distance/pinchDistance,(a.clientY+b.clientY)/2-$('grid').getBoundingClientRect().top);
+ pinchDistance=distance;
+}
+const grid=$('grid');
+grid.addEventListener('touchstart',touchScale,{passive:false});
+grid.addEventListener('touchmove',touchScale,{passive:false});
+for(const name of ['touchend','touchcancel'])grid.addEventListener(name,e=>{if(e.touches.length<2)pinchDistance=0;if(!e.touches.length)setTimeout(()=>multitouch=false,200)});
+grid.addEventListener('click',e=>{if(multitouch){e.preventDefault();e.stopPropagation()}},true);
+$('filter').onclick=()=>{
+ const body=openSheet('日历类别'), list=make('div','','calendarOptions');
+ for(const [key,name] of Object.entries(kindName)){
+  const line=make('div','','sheetheader'), label=make('label',name), input=make('input');
+  input.type='checkbox';input.checked=selectedKinds.has(key);
+  input.onchange=()=>{input.checked?selectedKinds.add(key):selectedKinds.delete(key);renderGrid()};
+  label.prepend(input);
+  line.append(label,button('只看','plain',()=>{selectedKinds=new Set([key]);renderGrid();$('sheet').close()}));list.append(line);
+ }
+ body.append(list,button('显示全部','subtle',()=>{selectedKinds.clear();renderGrid();$('sheet').close()}));
+};
+$('import').onclick=()=>{
+ const body=openSheet('导入手机日历');
+ body.append(make('p','网页使用示例日程。安卓会先请求读取权限，再让你挑选手机日历。','quiet'));
+ const card=make('div','','panel');card.append(make('strong','小米日历 · 个人日程'), make('p','牙科复诊、周六羽毛球、取报告'));
+ body.append(card,button(imported?'重新导入示例':'导入 3 条示例日程','primary',()=>{imported=true;selectedKinds.clear();$('sheet').close();renderGrid();toast('已导入 3 条示例日程')}));
+};
+function renderChores(){
+ const cards=chores.map(([icon,title,date],i)=>{
+  if(completed.has(i))return null;
+  const tile=button('','tile',()=>{if(tile.longPressed){tile.longPressed=false;return}completed.add(i);renderChores();toast('已完成 · '+title)});
+  tile.setAttribute('aria-label','完成 '+title);tile.append(make('span',icon),make('strong',title),make('small',date));
+  let timeout;function cancel(){clearTimeout(timeout)}
+  tile.onpointerdown=()=>{tile.longPressed=false;timeout=setTimeout(()=>{tile.longPressed=true;const body=openSheet(title);body.append(make('p','计划 · '+date,'panel'))},550)};
+  tile.onpointerup=cancel;tile.onpointercancel=cancel;tile.onpointerleave=cancel;
+  tile.oncontextmenu=e=>e.preventDefault();return tile;
+ }).filter(Boolean);
+ $('tiles').replaceChildren(...cards);
+ $('doneCount').textContent='已完成 · '+completed.size;
+ $('doneItems').replaceChildren(...[...completed].map(i=>make('p','✓ '+chores[i][1])));
+}
+function navigate(name){
+ const onCalendar=name==='calendar';$('calendar').hidden=!onCalendar;$('chores').hidden=onCalendar;
+ $('navCalendar').setAttribute('aria-current',onCalendar?'page':'false');$('navChores').setAttribute('aria-current',onCalendar?'false':'page');
+ onCalendar?renderGrid():renderChores();
+}
+$('navCalendar').onclick=()=>navigate('calendar');$('navChores').onclick=()=>navigate('chores');
+function idea(){
+ const body=openSheet('记个想法'), topic=make('select'), field=make('textarea'), noteList=make('div','','sheetbody');
+ for(const name of ['随手想法','准备读书会','整理照片'])topic.add(new Option(name));
+ topic.setAttribute('aria-label','关联事项');field.placeholder='想到什么，先记下来…';field.setAttribute('aria-label','想法内容');
+ const showNotes=()=>{noteList.replaceChildren(...notes.filter(n=>n.topic===topic.value).map(n=>make('div',n.text,'panel')));noteList.hidden=!noteList.childNodes.length};
+ topic.onchange=showNotes;
+ const actions=make('div','','actions');
+ actions.append(button('🎙 语音示例','subtle push',()=>{field.value=[field.value.trim(),'下次读书会可以试试先交换各自最喜欢的一段。'].filter(Boolean).join('\n');field.focus()}),
+ button('保存','primary',()=>{const text=field.value.trim();if(!text){field.focus();return}notes.push({topic:topic.value,text});try{localStorage.setItem('personald-mobile-draft-notes',JSON.stringify(notes))}catch{}field.value='';showNotes();toast('想法已保存')}));
+ body.append(topic,field,actions,make('p','语音按钮演示转文字后的效果。','quiet'),noteList);showNotes();field.focus();
+}
+document.querySelectorAll('[data-idea]').forEach(el=>el.onclick=idea);
+$('close').onclick=()=>$('sheet').close();
+$('sheet').addEventListener('click',e=>{if(e.target!==$('sheet'))return;const r=$('sheet').getBoundingClientRect();if(e.clientY<r.top||e.clientX<r.left||e.clientX>r.right)$('sheet').close()});
+window.addEventListener('resize',()=>{if(!$('calendar').hidden)renderGrid()});
+renderGrid();
+</script>
+</body>
+</html>
