@@ -13,6 +13,8 @@
 .week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}.week button{min-width:0;border-radius:7px;background:#edf2f6;padding:3px 2px;font-size:11px;text-align:center}.week button[aria-pressed=true]{background:var(--mint);color:var(--green)}.week button span{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.week button span+span{font-size:9px;margin-top:3px}
 .rows{display:grid;gap:4px}.row{display:flex;align-items:center;gap:7px;padding:3px 6px;border-radius:7px;background:#f1f5ec;min-height:33px;font-size:12px}.row strong{flex:1;font-weight:600}.row input{accent-color:var(--green);height:15px;width:15px}.row small{color:var(--soft)}.row.wide{justify-content:space-between}.summary{padding:6px 4px 0;color:var(--soft);font-size:11px}
 .buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.random{border-radius:14px;background:var(--mint);padding:10px 6px;font-size:13px;font-weight:650}.random-result{margin-top:8px;min-height:20px}.line{margin-top:7px}
+
+.widget-settings{display:flex;gap:8px;flex-wrap:wrap;padding-top:8px;font-size:12px}.widget-settings select{color:inherit;background:#fffdf7;padding:3px;border:1px solid #c0d2c5;border-radius:6px}.chores-surface{background:rgba(255,253,247,var(--opacity,1))}.chores-surface .tile{background:rgba(241,245,236,var(--opacity,1))}.random{width:78px;aspect-ratio:1;padding:6px;border-radius:11px;justify-self:center}.random span{display:block;font-size:24px}.week-nav{width:32px;height:32px;background:#e6efe7;border-radius:7px}.bar .range{font-size:12px}
 </style>
 </head>
 <body>
@@ -22,8 +24,11 @@
 <p>点按示例卡片，体验完成、选日期和随机挑选。</p>
 <article aria-label="家务小部件">
  <div class="option"><h2>家务</h2><span class="size">4×3</span></div>
- <section class="sample"><div class="bar"><strong>家务</strong><span class="pill" id="choreCount"></span></div><div class="tiles" id="chores"></div></section>
- <p class="caption">点图标完成，名称底下显示本月实际完成次数。</p>
+ <section class="sample chores-surface" id="choresSurface"><div class="bar"><strong>家务</strong><span class="pill" id="choreCount"></span></div><div class="tiles" id="chores"></div></section>
+ <div class="widget-settings">
+  <label>高度 <select id="choreRows"><option value="1">1 行</option><option value="2">2 行</option><option selected value="3">3 行</option></select></label>
+  <label>背景不透明度 <select id="choreOpacity"><option>25%</option><option>50%</option><option>75%</option><option selected>100%</option></select></label>
+ </div>
 </article>
 <article aria-label="任务周视图">
  <div class="option"><h2>任务周视图</h2><span class="size">约 4×3 格</span></div>
@@ -31,12 +36,14 @@
 </article>
 <article aria-label="任务列表">
  <div class="option"><h2>任务列表</h2><span class="size">不含家务</span></div>
- <section class="sample"><div class="rows" id="tasks"></div></section>
- <p class="caption">显示有日期和无日期的待办，点圆框完成。</p>
+ <section class="sample">
+ <div class="bar"><button class="week-nav" id="taskPrev" aria-label="任务列表上一周">‹</button><button id="taskRange" class="range" aria-label="回到本周"></button><button class="week-nav" id="taskNext" aria-label="任务列表下一周">›</button></div>
+ <div class="rows" id="tasks"></div></section>
+ <p class="caption">左右切周，点日期范围回本周；点方框完成。</p>
 </article>
 <article aria-label="随机按钮">
- <div class="option"><h2>两个随机按钮</h2><span class="size">各约 2×1 格</span></div>
- <section class="sample"><div class="buttons"><button class="random" id="houseworkPick">🎲 随机家务</button><button class="random" id="taskPick">🎲 随机任务</button></div><p class="random-result" id="result" aria-live="polite">点按钮挑一件未完成的事项。</p></section>
+ <div class="option"><h2>两个随机按钮</h2><span class="size">各约 1×1 格</span></div>
+ <section class="sample"><div class="buttons"><button class="random" id="houseworkPick"><span>🎲</span>随机家务</button><button class="random" id="taskPick"><span>🎲</span>随机任务</button></div><p class="random-result" id="result" aria-live="polite">点按钮挑一件未完成的事项。</p></section>
  <p class="caption">点按只挑选待办，是否完成由你勾选。</p>
 </article>
 </main>
@@ -48,14 +55,14 @@ const chores=[
  ['💧','给花浇水',2],['🧹','整理玄关',3],['🧽','擦餐桌',6],['🧹','清理书桌',1]
 ].map(([icon,title,count])=>({icon,title,count,done:false}));
 const tasks=[
- {title:'交材料',date:26},{title:'准备读书会',date:26},{title:'领取快递',date:27},{title:'整理照片',date:null}
+ {title:'交材料',date:26},{title:'准备读书会',date:26},{title:'领取快递',date:27},{title:'整理照片',date:null},{title:'本周复盘',date:33}
 ];
-let selectedDay=26;
+let selectedDay=26, taskWeek=0;
 function text(tag,value){const e=document.createElement(tag);e.textContent=value;return e}
 function renderChores(){
  const pending=chores.filter(t=>!t.done);
  $('choreCount').textContent=pending.length+' 件待做';
- $('chores').replaceChildren(...pending.map(t=>{
+ $('chores').replaceChildren(...pending.slice(0,Number($('choreRows').value)*4).map(t=>{
   const card=text('button','');card.className='tile';card.setAttribute('aria-label','完成 '+t.title);
   const icon=text('span',t.icon);icon.className='icon';
   card.append(icon,text('span',t.title),text('small','本月已做 '+t.count+' 次'));
@@ -76,12 +83,15 @@ function renderWeek(){
  $('weekSummary').textContent='11 月 '+selectedDay+' 日 · '+(titles.join('、')||'没有待办');
 }
 function renderTasks(){
- const pending=tasks.filter(t=>!t.done);
+ const start=23+taskWeek*7,end=start+6;
+ const fmt=d=>{const date=new Date(2026,10,d);return (date.getMonth()+1)+'/'+date.getDate()};
+ $('taskRange').textContent=fmt(start)+' – '+fmt(end);
+ const pending=tasks.filter(t=>!t.done&&t.date!=null&&t.date>=start&&t.date<=end);
  $('tasks').replaceChildren(...pending.map(t=>{
   const row=text('label','');row.className='row';
   const input=document.createElement('input');input.type='checkbox';input.setAttribute('aria-label','完成 '+t.title);
   input.onchange=()=>{t.done=true;renderTasks();renderWeek()};
-  row.append(input,text('strong',t.title),text('small',t.date?'11/'+t.date:'无日期'));return row;
+  row.append(input,text('strong',t.title),text('small',fmt(t.date)));return row;
  }));
  if(!pending.length)$('tasks').append(text('p','暂时没有待办'));
 }
@@ -91,6 +101,9 @@ function pick(entries,empty){
 }
 $('houseworkPick').onclick=()=>pick(chores,'没有待做家务');
 $('taskPick').onclick=()=>pick(tasks,'没有待办任务');
+$('choreRows').onchange=renderChores;
+$('choreOpacity').onchange=()=>$('choresSurface').style.setProperty('--opacity',parseInt($('choreOpacity').value,10)/100);
+$('taskPrev').onclick=()=>{taskWeek--;renderTasks()};$('taskNext').onclick=()=>{taskWeek++;renderTasks()};$('taskRange').onclick=()=>{taskWeek=0;renderTasks()};
 renderChores();renderWeek();renderTasks();
 </script>
 </body>
