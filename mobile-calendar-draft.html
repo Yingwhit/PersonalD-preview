@@ -26,6 +26,11 @@ textarea,select{background:#fffdf9;border:1px solid #bdcabb;border-radius:12px;p
 #calendar .monthbar .plain{min-width:34px;padding-inline:4px}#calendar .monthbar #today{min-width:42px;font-size:12px}#calendar .monthbar .scale{margin-left:3px}#calendar .monthbar .scale button{min-width:30px;min-height:32px}#calendar .monthbar .scale span{font-size:10px;min-width:26px}
 .cell.workday{background:#f0f6fc}.cell.holiday{background:#fff1e8}.cell.other.workday{background:#e9eff5}.cell.other.holiday{background:#f6ede5}.cell.selected{box-shadow:inset 0 0 0 1.5px #75a18a}.weekdays{padding:3px 0}
 .wish-card{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fffdf8;border-radius:16px;padding:13px 14px;margin:8px 0}.wish-card strong,.wish-card span,.wish-card small{display:block}.wish-card span{margin:3px 0;font-size:14px}.wish-card small{color:var(--soft)}.detail-heading{margin-top:5px;font-size:15px}.subtask{display:flex;align-items:center;gap:7px;min-height:45px;background:#eef2e9;border-radius:10px;padding:2px 9px}.subtask input{accent-color:var(--green);width:17px;height:17px}.subtask button{text-align:left;flex:1}.subtask.done button{color:var(--soft);text-decoration:line-through}.taskline.child{margin-left:13px}
+
+.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:6px;margin:5px 0 8px}.sectionhead h2{font-size:20px}.sectionhead .quiet{white-space:nowrap}.task-divider{border:0;border-top:1px solid var(--line);margin:17px 0 12px}.taskpage .tiles{margin-top:4px}.taskpage .tile{min-height:72px}.taskpage .tile span{font-size:23px}.taskpage .tile small{font-size:10px}.taskpage .houseworkDone{margin-top:9px;padding:4px 2px;font-size:12px;color:var(--soft)}.taskpage .houseworkDone p{padding:4px 6px}
+.datehead{position:relative;height:25px}.datehead .shift-label{position:absolute;right:1px;top:6px;font-size:9px;line-height:12px;color:#526f86}.holiday .datehead .shift-label{color:#92593e}.dayhint{height:12px;color:var(--soft);line-height:12px;font-size:9px}
+.setting-line{display:flex;align-items:center;justify-content:space-between;gap:8px}.setting-line input{width:38px;height:20px;accent-color:var(--green)}a.gallery{display:block;text-decoration:none;text-align:center}
+.ball-demo{position:absolute;z-index:4;right:6px;top:50%;display:grid;gap:7px;justify-items:end}.ball-demo .ball-toggle{width:45px;height:45px;border-radius:50%;background:var(--green);color:#fff;box-shadow:0 5px 14px #244a3444;font-size:25px;touch-action:none}.ball-panel{position:absolute;bottom:51px;right:0;min-width:126px;display:grid;padding:5px;border-radius:13px;background:#fffcf1;box-shadow:0 4px 20px #2842332b}.ball-panel button{min-height:36px;white-space:nowrap}.desc-actions{display:flex;align-items:center;justify-content:space-between;gap:8px}.desc-actions button{color:var(--green);min-height:33px;font-size:12px}
 </style>
 </head>
 <body>
@@ -42,7 +47,11 @@ textarea,select{background:#fffdf9;border:1px solid #bdcabb;border-radius:12px;p
     <div class="status"><button id="dayButton"></button><span class="quiet">双指张开拉高</span></div>
   </main>
   <main id="tasks" class="taskpage">
-    <div class="page-title"><h1>事项</h1><button id="pickTask" class="pill">帮我挑一件</button></div>
+    <div class="sectionhead"><h2>家务</h2><span class="quiet" id="houseworkCount"></span></div>
+    <div class="tiles" id="houseworkTiles"></div>
+    <details id="houseworkDone" class="houseworkDone" hidden><summary id="houseworkDoneCount"></summary><div id="houseworkDoneItems"></div></details>
+    <hr class="task-divider">
+    <div class="sectionhead"><h2>其他事项</h2><button id="pickTask" class="pill">帮我挑一件</button></div>
     <div class="chips" id="categories" aria-label="事项分类"></div>
     <div class="tasktools"><div class="chips" id="dates" aria-label="日期筛选"></div><button id="taskFilter" class="subtle">筛选</button></div>
     <div id="taskRows"></div>
@@ -59,13 +68,17 @@ textarea,select{background:#fffdf9;border:1px solid #bdcabb;border-radius:12px;p
     <button class="entry" id="review"><span class="entry-icon">▥</span><span><strong>复盘</strong><small>查看完成记录和统计</small></span><span class="arrow">›</span></button>
   </main>
   <div class="quick" id="quick">
-    <div id="quickActions" class="quick-actions" hidden><button id="addPrimary">添加事项</button><button data-idea>记想法</button></div>
+    <div id="quickActions" class="quick-actions" hidden><button id="addPrimary">添加事项</button><button id="addHousework">添加家务</button><button data-idea>记想法</button></div>
     <button id="quickToggle" class="quick-toggle" aria-label="快捷添加" aria-expanded="false">＋</button>
   </div>
   <nav class="nav" aria-label="主导航">
     <button data-nav="tasks" aria-current="page"><b>☑</b>事项</button><button data-nav="calendar"><b>▦</b>日历</button>
     <button data-nav="timer"><b>◷</b>计时</button><button data-nav="shopping"><b>♡</b>心愿清单</button><button data-nav="mine"><b>◉</b>我的</button>
   </nav>
+  <div class="ball-demo" id="ball" hidden>
+    <div class="ball-panel" id="ballPanel" hidden><button id="ballTask">添加事项</button><button id="ballWish">添加心愿</button><button id="ballOff">关闭悬浮球</button></div>
+    <button class="ball-toggle" id="ballToggle" aria-label="快捷添加悬浮球">＋</button>
+  </div>
   <div id="toast" class="toast" role="status" hidden></div>
 </div>
 <dialog id="sheet"><span class="handle"></span><div class="sheetheader"><h2 id="sheetTitle"></h2><button class="plain" id="close" aria-label="关闭">✕</button></div><div class="sheetbody" id="sheetBody"></div></dialog>
@@ -111,8 +124,22 @@ const shoppingItems=[
   steps:[{title:'查一查路线',done:true},{title:'选个周末',done:false}]},
  {name:'换一台咖啡机',detail:'放得下，日常清洗方便。',done:false,steps:[]}
 ];
-const taskCategories={all:'全部',cleaning:'家务',general:'事项',study:'学习'};
+const taskCategories={all:'全部',general:'事项',study:'学习'};
 const dateScopes={all:'全部日期',today:'今天',week:'本周',none:'无日期'};
+const settingGet=(key,fallback)=>{try{return localStorage.getItem(key)??fallback}catch{return fallback}};
+const settingSet=(key,value)=>{try{localStorage.setItem(key,value)}catch{}};
+let showWorkLabel=settingGet('personald-show-shift','true')==='true';
+let showBall=settingGet('personald-quick-ball','false')==='true';
+const lunar=new Intl.DateTimeFormat('zh-CN-u-ca-chinese',{day:'numeric'});
+const chineseDigits='一二三四五六七八九十';
+function lunarDay(date){
+ const n=Number(lunar.formatToParts(date).find(p=>p.type==='day')?.value);
+ if(n>=1&&n<=10)return '初'+chineseDigits[n-1];
+ if(n<20)return '十'+chineseDigits[n-11];
+ if(n===20)return '二十';
+ if(n<30)return '廿'+chineseDigits[n-21];
+ return '三十';
+}
 
 try { notes=JSON.parse(localStorage.getItem('personald-mobile-draft-notes')||'[]'); } catch {}
 const kindName={general:'事项',study:'学习'};
@@ -149,7 +176,10 @@ function renderGrid(){
    if(same(day,selection))cell.classList.add('selected');
    const open=()=>{selection=day;renderGrid();openDay(day)};
    cell.onclick=open;cell.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}};
-   cell.append(make('span',day.getDate(),'date'),make('div',col>4?'假':'班','dayhint'+(col>4?' off':'')));
+   const head=make('div','','datehead');
+   head.append(make('span',day.getDate(),'date'));
+   if(showWorkLabel)head.append(make('span',col>4?'假':'班','shift-label'));
+   cell.append(head,make('div',lunarDay(day),'dayhint'));
    const events=eventsFor(day), slots=Math.max(1,Math.floor((height-46)/19));
    const count=events.length>slots&&slots>1?slots-1:slots;
    events.slice(0,count).forEach(e=>cell.append(make('span',(e.done?'✓ ':'')+e.title,'event '+e.kind+(e.done?' done':''))));
@@ -250,7 +280,7 @@ function openTask(title, date, category, task){
 }
 function choreCards(){
  return chores.map(([icon,title,date],i)=>{
-  if(completed.has(i)||!title.includes(search)||dateScope==='none'||(dateScope==='today'&&date!=='今天'))return null;
+  if(completed.has(i))return null;
   const tile=button('','tile',()=>{if(tile.longPressed){tile.longPressed=false;return}completed.add(i);renderTasks();toast('已完成 · '+title)});
   tile.setAttribute('aria-label','完成 '+title);tile.append(make('span',icon),make('strong',title),make('small',date));
   let timeout;function cancel(){clearTimeout(timeout)}
@@ -281,10 +311,12 @@ function renderTasks(){
  const shown=localTasks.filter(t=>!t.finished&&taskMatches(t));
  $('pickTask').disabled=!shown.length;
  $('pickTask').onclick=()=>{const t=shown[0];if(t)openTask(t.title,due(t),taskCategories[t.kind],t)};
- if(taskKind==='cleaning'){
-  const tiles=make('div','','tiles');tiles.append(...choreCards());
-  rows.append(make('p','点图标完成 · 长按查看详情','subheading'),tiles);
- }
+ const pendingChores=choreCards();
+ $('houseworkCount').textContent=pendingChores.length+' 件待做';
+ $('houseworkTiles').replaceChildren(...pendingChores);
+ $('houseworkDone').hidden=!completed.size;
+ $('houseworkDoneCount').textContent='已完成家务 · '+completed.size;
+ $('houseworkDoneItems').replaceChildren(...[...completed].map(i=>make('p','✓ '+chores[i][1])));
  for(const t of shown){
   const isChild=t.parentId&&shown.some(parent=>parent.id===t.parentId);
   const line=make('div','','taskline '+t.kind+(isChild?' child':'')), check=button('○','check',()=>{t.finished=sampleToday;renderTasks();toast('已完成 · '+t.title)});
@@ -292,10 +324,9 @@ function renderTasks(){
   line.append(check,button(t.title,'taskname',()=>openTask(t.title,due(t),taskCategories[t.kind],t)),make('span',due(t),'daylabel'));
   rows.append(line);
  }
- if(!shown.length&&taskKind!=='cleaning')rows.append(make('p','没有符合筛选条件的待办','quiet'));
+ if(!shown.length)rows.append(make('p','没有符合筛选条件的待办','quiet'));
  $('taskRows').replaceChildren(rows);
  const done=localTasks.filter(t=>t.finished&&taskMatches(t)).map(t=>make('p','✓ '+t.title));
- if(taskKind==='all'||taskKind==='cleaning')done.push(...[...completed].map(i=>make('p','✓ '+chores[i][1])));
  $('doneCount').textContent='已完成 · '+done.length;
  $('doneItems').replaceChildren(...done);
 }
@@ -311,15 +342,15 @@ function setQuick(expanded){
  $('quickActions').hidden=!expanded;$('quickToggle').setAttribute('aria-expanded',String(expanded));$('quickToggle').textContent=expanded?'×':'＋';
 }
 $('quickToggle').onclick=()=>setQuick($('quickActions').hidden);
-$('addPrimary').onclick=()=>{
+function capture(kind){
  setQuick(false);
- const isShop=view==='shopping', body=openSheet(isShop?'添加心愿':'添加事项'), field=make('input','','basicInput');
- field.placeholder=isShop?'心愿名称':'事项名称';
+ const isShop=kind==='wish', isChore=kind==='chore', body=openSheet(isShop?'添加心愿':isChore?'添加家务':'添加事项'), field=make('input','','basicInput');
+ field.placeholder=isShop?'心愿名称':isChore?'家务名称':'事项名称';
  body.append(field);
  const detail=make('textarea');
  if(isShop){detail.placeholder='心愿详情（选填）';body.append(detail)}
  const category=make('select');
- if(!isShop){
+ if(!isShop&&!isChore){
   for(const [key,label] of Object.entries(taskCategories).filter(([key])=>key!=='all'))category.add(new Option(label,key));
   category.value=view==='calendar'?(selectedKinds.values().next().value||'general'):(taskKind==='all'?'general':taskKind);
   body.append(category);
@@ -328,16 +359,31 @@ $('addPrimary').onclick=()=>{
  body.append(button('添加','primary',()=>{
   const title=field.value.trim();if(!title){field.focus();return}
   if(isShop){shoppingItems.push({name:title,detail:detail.value.trim(),done:false,steps:[]});renderShopping()}
+  else if(isChore){chores.push(['🧹',title,'无日期']);renderTasks()}
   else {localTasks.push({id:'new-'+nextTaskId++,title,kind:category.value,date:view==='calendar'?selection:null,energy:0});if(view==='calendar')renderGrid();else renderTasks()}
   $('sheet').close();toast('已添加');
  }));
  field.focus();
-};
+}
+$('addPrimary').onclick=()=>capture(view==='shopping'?'wish':'task');
+$('addHousework').onclick=()=>capture('chore');
+function editWishDescription(wish,redraw){
+ const body=openSheet('编辑心愿'), name=make('input','','basicInput'), detail=make('textarea'), actions=make('div','','actions');
+ name.placeholder='心愿名称';name.value=wish.name;
+ detail.placeholder='心愿详情（选填）';detail.value=wish.detail;
+ actions.append(button('取消','subtle',redraw),button('保存','primary',()=>{
+  if(!name.value.trim()){name.focus();return}
+  wish.name=name.value.trim();wish.detail=detail.value.trim();redraw();
+ }));
+ body.append(name,detail,actions);detail.focus();
+}
 function wishDetail(wish){
  const body=openSheet('心愿详情'), redraw=()=>{renderShopping();wishDetail(wish)};
  const heading=make('div','','panel');heading.append(make('strong',wish.name));
- if(wish.detail)heading.append(make('p',wish.detail));
- body.append(heading,subtaskRow('标记已实现',wish.done,done=>{wish.done=done;redraw()},()=>{}));
+ const details=make('div','','panel'), detailHead=make('div','','desc-actions');
+ detailHead.append(make('strong','详情'),button(wish.detail?'编辑详情':'添加详情','',()=>editWishDescription(wish,redraw)));
+ details.append(detailHead,make('p',wish.detail||'尚未填写心愿详情'));
+ body.append(heading,details,subtaskRow('标记已实现',wish.done,done=>{wish.done=done;redraw()},()=>{}));
  body.append(make('strong','子任务 · '+wish.steps.filter(step=>step.done).length+'/'+wish.steps.length,'detail-heading'));
  wish.steps.forEach(step=>body.append(subtaskRow(step.title,step.done,done=>{step.done=done;redraw()},()=>addSubtask(title=>{
   step.title=title;
@@ -365,11 +411,60 @@ function renderTime(){const seconds=Math.floor((timerElapsed+(timerStarted?Date.
 setInterval(renderTime,250);
 const timerCard=make('div','','panel');timerCard.append(make('p','专注时长'),timerDisplay,timerButton);
 $('timerEntries').append(timerCard);
+function toggleBall(show){
+ showBall=show;settingSet('personald-quick-ball',String(show));
+ $('ball').hidden=!show;$('ballPanel').hidden=true;
+ if($('showBallSetting'))$('showBallSetting').checked=show;
+}
+function settingsSwitch(title,id,checked,onChange){
+ const row=make('label',title,'setting-line panel'), input=make('input');
+ input.id=id;input.type='checkbox';input.checked=checked;input.onchange=()=>onChange(input.checked);row.append(input);return row;
+}
 $('settings').onclick=()=>{
- const body=openSheet('个人设置');
+ const body=openSheet('个人设置'), gallery=make('a','桌面小部件 · 查看三种样式','gallery subtle');
+ gallery.href='widget-styles-draft.html';
+ body.append(
+  settingsSwitch('显示班/假文字','showWorkLabel',showWorkLabel,checked=>{
+   showWorkLabel=checked;settingSet('personald-show-shift',String(checked));if(view==='calendar')renderGrid();
+  }),
+  make('p','关闭后仍保留工作日和假期底色。','quiet'),
+  gallery,
+  settingsSwitch('快捷添加悬浮球','showBallSetting',showBall,toggleBall),
+  make('p','网页模拟悬浮球；安卓开启时会请求悬浮窗权限。','quiet')
+ );
  for(const prompt of ['通知权限与声音','准确提醒','计时悬浮窗权限'])body.append(make('div',prompt,'panel'));
- body.append(make('p','这些项目在安卓里会打开对应的系统设置。','quiet'));
 };
+$('ballToggle').onclick=()=>$('ballPanel').hidden=!$('ballPanel').hidden;
+$('ballOff').onclick=()=>toggleBall(false);
+$('ballTask').onclick=()=>{navigate('tasks');$('ballPanel').hidden=true;capture('task')};
+$('ballWish').onclick=()=>{navigate('shopping');$('ballPanel').hidden=true;capture('wish')};
+let ballDrag;
+$('ballToggle').onpointerdown=e=>{
+ const box=$('ball').getBoundingClientRect(), phone=document.querySelector('.phone').getBoundingClientRect();
+ ballDrag={x:e.clientX,y:e.clientY,left:box.left-phone.left,top:box.top-phone.top,moved:false};
+ e.currentTarget.setPointerCapture(e.pointerId);
+};
+$('ballToggle').onpointermove=e=>{
+ if(!ballDrag)return;
+ const dx=e.clientX-ballDrag.x,dy=e.clientY-ballDrag.y;
+ if(Math.hypot(dx,dy)<5&&!ballDrag.moved)return;
+ ballDrag.moved=true;$('ballPanel').hidden=true;
+ const phone=document.querySelector('.phone'),ball=$('ball');
+ ball.style.right='auto';
+ ball.style.left=Math.max(0,Math.min(phone.clientWidth-45,ballDrag.left+dx))+'px';
+ ball.style.top=Math.max(35,Math.min(phone.clientHeight-115,ballDrag.top+dy))+'px';
+};
+$('ballToggle').onpointerup=e=>{
+ if(ballDrag?.moved){
+   const suppress=click=>{click.preventDefault();click.stopImmediatePropagation()};
+   e.currentTarget.addEventListener('click',suppress,{capture:true,once:true});
+   const target=e.currentTarget;
+   setTimeout(()=>target.removeEventListener('click',suppress,true),150);
+ }
+ ballDrag=null;
+};
+$('ballToggle').onpointercancel=()=>ballDrag=null;
+toggleBall(showBall);
 $('sync').onclick=()=>{
  const body=openSheet('WebDAV 同步');
  body.append(make('div','尚未配置同步账户','panel'),make('p','可在安卓中设置 WebDAV 地址、测试连接并处理同步冲突。','quiet'));
@@ -392,6 +487,7 @@ function navigate(name){
  setQuick(false);
  $('quick').hidden=!['tasks','calendar','shopping'].includes(name);
  $('addPrimary').textContent=name==='shopping'?'添加心愿':'添加事项';
+ $('addHousework').hidden=name!=='tasks';
  if(name==='calendar')renderGrid();
  if(name==='tasks')renderTasks();
  if(name==='shopping')renderShopping();
